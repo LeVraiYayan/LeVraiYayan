@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Soutiens YAYAN</title>
+<style>
+:root{color-scheme:dark;--bg:#0b1020;--panel:#141c31;--text:#f3f6ff;--muted:#a9b4cc;--blue:#3978ff;--green:#49e0a1}
+*{box-sizing:border-box}body{margin:0;font-family:system-ui,-apple-system,Segoe UI,sans-serif;background:radial-gradient(ellipse at top,#1b2a50 0,#0b1020 55%);color:var(--text);min-height:100vh;display:grid;place-items:center;padding:22px}
+main{width:min(680px,100%)}.brand{font-size:13px;letter-spacing:.2em;color:#9cb8ff;font-weight:800;text-transform:uppercase}
+.card{margin-top:16px;background:rgba(20,28,49,.92);border:1px solid #2b3856;border-radius:24px;padding:clamp(22px,5vw,42px);box-shadow:0 24px 70px #0005}
+.badge{display:inline-flex;align-items:center;gap:8px;border:1px solid #315b53;color:#a6f5d4;background:#15362f;padding:7px 11px;border-radius:99px;font-size:12px;font-weight:700}
+h1{font-size:clamp(30px,7vw,48px);line-height:1.08;margin:18px 0 12px;letter-spacing:-.04em}
+p{color:var(--muted);line-height:1.65}.amounts{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:24px 0 14px}
+.amount{padding:13px 5px;border-radius:12px;border:1px solid #3a4866;background:#10182b;color:white;font-size:16px;font-weight:750;cursor:pointer}
+.amount.active{background:#244bb0;border-color:#75a0ff;box-shadow:0 0 0 2px #3978ff33}
+label{display:block;font-size:13px;color:#d7deee;margin:18px 0 8px}input{width:100%;padding:14px;border-radius:12px;border:1px solid #3a4866;background:#0c1324;color:white;font-size:16px}
+.pay{display:block;text-align:center;margin-top:18px;width:100%;padding:15px;border:0;border-radius:13px;background:#ffc439;color:#1d2737;font-weight:850;font-size:16px;text-decoration:none;cursor:pointer}
+.note{font-size:12px;color:#8e9bb5;margin-top:16px}.footer{font-size:12px;text-align:center;color:#75829e;margin:18px}
+hr{border:0;border-top:1px solid #2b3856;margin:25px 0}
+@media(max-width:400px){.amounts{grid-template-columns:repeat(2,1fr)}}
+</style>
+</head>
+<body>
+<main>
+  <div class="brand">YAYAN • Soutien communautaire</div>
+  <section class="card">
+    <span class="badge">● DON VOLONTAIRE</span>
+    <h1>Aide-moi à créer<br>de nouveaux projets.</h1>
+    <p>Si tu apprécies mes créations et mes projets informatiques, tu peux me soutenir avec un don. Chaque contribution est facultative et m’encourage à continuer !</p>
+    <div class="amounts" role="group" aria-label="Choisir un montant">
+      <button class="amount active" data-amount="1">1 €</button>
+      <button class="amount" data-amount="2">2 €</button>
+      <button class="amount" data-amount="5">5 €</button>
+      <button class="amount" data-amount="10">10 €</button>
+    </div>
+    <label for="custom">Ou choisis un montant (en euros)</label>
+    <input id="custom" type="number" min="1" max="1000" step="0.50" placeholder="Ex. 3,50" inputmode="decimal">
+    <a id="donate" class="pay" href="https://paypal.me/levraiyayan" target="_blank" rel="noopener noreferrer">Continuer avec PayPal →</a>
+    <p class="note">Le bouton ouvre ta page PayPal.Me. Le donateur pourra choisir le montant sur PayPal.</p>
+    <hr>
+    <p style="font-size:13px;margin-bottom:0">Merci pour ton soutien 💙 Ne partage jamais ton mot de passe ni les informations de ta carte sur ce site.</p>
+  </section>
+  <div class="footer">© <span id="year"></span> YAYAN • Page de soutien indépendante</div>
+</main>
+<script>
+let selected = 1;
+const custom = document.getElementById('custom');
+const buttons = [...document.querySelectorAll('.amount')];
+function setSelected(n){selected=n;buttons.forEach(b=>b.classList.toggle('active',Number(b.dataset.amount)===n));}
+buttons.forEach(b=>b.addEventListener('click',()=>{custom.value='';setSelected(Number(b.dataset.amount));}));
+custom.addEventListener('input',()=>{buttons.forEach(b=>b.classList.remove('active'));});
+document.getElementById('donate').addEventListener('click',e=>{
+  const amount=custom.value.trim()?Number(custom.value):selected;
+  if(!Number.isFinite(amount)||amount<1||amount>1000){e.preventDefault();alert('Choisis un montant entre 1 € et 1 000 €.');return;}
+  // Ouvre le profil PayPal.Me du créateur. Le montant est choisi sur PayPal.
+  e.currentTarget.href='https://paypal.me/levraiyayan';
+});
+document.getElementById('year').textContent=new Date().getFullYear();
+</script>
+</body>
+</html>
